@@ -11,7 +11,6 @@
 #
 # Contributors:
 #    Pierre Goudet - initial committer
-#    And Others.
 
 require 'paho_mqtt/handler'
 require 'paho_mqtt/connection_helper'
@@ -97,9 +96,9 @@ module PahoMqtt
       @client_id = prefix << Array.new(lenght) { charset.sample }.join
     end
 
-    def config_ssl_context(cert_path, key_path, ca_path=nil)
+    def config_ssl_context(cert_path, key_path, ca_path=nil,alpn_protocols=nil)
       @ssl ||= true
-      @ssl_context = SSLHelper.config_ssl_context(cert_path, key_path, ca_path)
+      @ssl_context = SSLHelper.config_ssl_context(cert_path, key_path, ca_path,alpn_protocols)
     end
 
     def connect(host=@host, port=@port, keep_alive=@keep_alive, persistent=@persistent, blocking=@blocking)
@@ -189,6 +188,7 @@ module PahoMqtt
 
     def loop_misc
       if @connection_helper.check_keep_alive(@persistent, @handler.last_ping_resp, @keep_alive) == MQTT_CS_DISCONNECT
+        PahoMqtt.logger.debug("Reconnecting on loop_misc...") if PahoMqtt.logger?
         reconnect if check_persistence
       end
       @publisher.check_waiting_publisher

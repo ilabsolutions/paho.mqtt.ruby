@@ -11,7 +11,6 @@
 #
 # Contributors:
 #    Pierre Goudet - initial committer
-#    And Others.
 
 module PahoMqtt
   class Subscriber

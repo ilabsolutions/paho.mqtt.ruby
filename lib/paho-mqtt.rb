@@ -11,7 +11,6 @@
 #
 # Contributors:
 #    Pierre Goudet - initial committer
-#    And Others.
 
 require "paho_mqtt/version"
 require "paho_mqtt/client"
@@ -101,6 +100,10 @@ module PahoMqtt
   Thread.abort_on_exception = true
 
   def logger=(logger_path)
+    if !logger_path
+      @logger = nil
+      return
+    end
     file           = File.open(logger_path, "a+")
     file.sync      = true
     log_file       = Logger.new(file)

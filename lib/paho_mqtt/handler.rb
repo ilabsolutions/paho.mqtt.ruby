@@ -11,7 +11,6 @@
 #
 # Contributors:
 #    Pierre Goudet - initial committer
-#    And Others.
 
 module PahoMqtt
   class Handler
@@ -52,13 +51,13 @@ module PahoMqtt
       end
       return result
     end
-    
+
     def handle_packet(packet)
       PahoMqtt.logger.info("New packet #{packet.class} received.") if PahoMqtt.logger?
       type = packet_type(packet)
       self.send("handle_#{type}", packet)
     end
-    
+
     def register_topic_callback(topic, callback, &block)
       if topic.nil?
         PahoMqtt.logger.error("The topics where the callback is trying to be registered have been found nil.") if PahoMqtt.logger?
