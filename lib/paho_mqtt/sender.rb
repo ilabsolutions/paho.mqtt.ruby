@@ -11,7 +11,6 @@
 #
 # Contributors:
 #    Pierre Goudet - initial committer
-#    And Others.
 
 module PahoMqtt
   class Sender
@@ -34,11 +33,12 @@ module PahoMqtt
 
     def send_packet(packet)
       begin
-        @socket.write(packet.to_s) unless @socket.nil? || @socket.closed?
         @last_ping_req = Time.now
+        @socket.write(packet.to_s) unless @socket.nil? || @socket.closed?
         MQTT_ERR_SUCCESS
       end
-    rescue StandardError
+    rescue StandardError => e
+      PahoMqtt.logger.error("send_packet StandardError: #{e.inspect}") if PahoMqtt.logger?
       raise WritingException
     rescue IO::WaitWritable
       IO.select(nil, [@socket], nil, SELECT_TIMEOUT)

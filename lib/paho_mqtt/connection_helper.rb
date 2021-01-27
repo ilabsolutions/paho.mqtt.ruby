@@ -11,7 +11,6 @@
 #
 # Contributors:
 #    Pierre Goudet - initial committer
-#    And Others.
 
 require 'socket'
 
@@ -87,8 +86,8 @@ module PahoMqtt
         else
           @socket = tcp_socket
         end
-      rescue StandardError
-        PahoMqtt.logger.warn("Could not open a socket with #{@host} on port #{@port}.") if PahoMqtt.logger?
+      rescue StandardError => e
+        PahoMqtt.logger.warn("Could not open a socket with #{@host} on port #{@port}. (#{e.inspect})") if PahoMqtt.logger?
       end
     end
 
